@@ -44,5 +44,59 @@ export class GestorBandejas {
 
     }
 
-    
+    mover(id: string, destino: TipoBandeja): void {
+
+        const actual = this.exigirUbicacion(id);
+
+        if (actual === destino) {
+            throw new Error("El correo " + id + " ya está en " + destino);
+        }
+
+        if (!(actual === TipoBandeja.BORRADORES && destino === TipoBandeja.ENVIADOS)) {
+            throw new Error("Movimiento no permitido: " + actual + " -> " + destino);
+        }
+
+        this.ubicacion.set(id, destino);
+
+    }
+
+    // Eliminación lógica: el correo pasa a ELIMINADOS y se recuerda su bandeja de origen.
+    eliminar(id: string): void {
+
+        const actual = this.exigirUbicacion(id);
+
+        if (actual === TipoBandeja.ELIMINADOS) {
+            throw new Error("El correo " + id + " ya está eliminado");
+        }
+
+        this.origen.set(id, actual);
+        this.ubicacion.set(id, TipoBandeja.ELIMINADOS);
+
+    }
+
+    // Devuelve el correo eliminado a la bandeja de donde salió.
+    restaurar(id: string): void {
+
+        const actual = this.exigirUbicacion(id);
+
+        if (actual !== TipoBandeja.ELIMINADOS) {
+            throw new Error("El correo " + id + " no está en ELIMINADOS");
+        }
+
+        this.ubicacion.set(id, this.origen.get(id) as TipoBandeja);
+        this.origen.delete(id);
+
+    }
+
+    private exigirUbicacion(id: string): TipoBandeja {
+
+        const bandeja = this.ubicacion.get(id);
+
+        if (bandeja === undefined) {
+            throw new Error("No existe el correo " + id);
+        }
+
+        return bandeja;
+
+    }
 }

@@ -40,5 +40,26 @@ describe("GestorBandejas", () => {
         expect(g.cantidad(TipoBandeja.BORRADORES)).toBe(0);
         expect(g.cantidad(TipoBandeja.ENVIADOS)).toBe(1);
     });
-    
+
+    it("rechaza movimientos no permitidos", () => {
+        const g = new GestorBandejas();
+        const c = nuevoCorreo();
+        g.agregar(c, TipoBandeja.ENTRADA);
+
+        expect(() => g.mover(c.getId(), TipoBandeja.ENVIADOS)).toThrow();
+    });
+
+    it("elimina lógicamente y restaura a la bandeja de origen", () => {
+        const g = new GestorBandejas();
+        const c = nuevoCorreo();
+        g.agregar(c, TipoBandeja.ENTRADA);
+
+        g.eliminar(c.getId());
+        expect(g.obtener(TipoBandeja.ELIMINADOS)).toEqual([c]);
+        expect(g.cantidad(TipoBandeja.ENTRADA)).toBe(0);
+
+        g.restaurar(c.getId());
+        expect(g.obtener(TipoBandeja.ENTRADA)).toEqual([c]);
+        expect(g.cantidad(TipoBandeja.ELIMINADOS)).toBe(0);
+    });
 });
