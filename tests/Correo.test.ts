@@ -25,4 +25,21 @@ describe("Correo", () => {
     correo.getDestinatarios().pop();
     expect(correo.getDestinatarios().length).toBe(1);
   });
+    it("un correo con remitente, asunto y destinatario es válido para enviar", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
+    const correo = new Correo(remitente, [destinatario], "Hola", "texto");
+    expect(correo.esValidoParaEnviar()).toBe(true);
+  });
+    it("un correo sin asunto no es válido para enviar", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
+    const correo = new Correo(remitente, [destinatario], "   ", "texto");
+    expect(correo.esValidoParaEnviar()).toBe(false);
+  });
+    it("un correo sin destinatarios no es válido para enviar", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const correo = new Correo(remitente, [], "Hola", "texto");
+    expect(correo.esValidoParaEnviar()).toBe(false);
+  });
 });

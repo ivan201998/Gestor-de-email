@@ -36,4 +36,8 @@ export class Correo {
     getCuerpo(): string {
         return this.cuerpo;
     }
+    
+    esValidoParaEnviar(): boolean {
+        return this.asunto.trim() !== "" && this.destinatarios.length > 0;
+    }
 }
