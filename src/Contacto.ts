@@ -1,5 +1,4 @@
 // RF-03: un contacto tiene nombre completo y dirección de correo.
-// Puede usarse como remitente o como destinatario de un Correo.
 
 export class Contacto {
 

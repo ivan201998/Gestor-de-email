@@ -42,7 +42,7 @@ describe("AgendaContactos", () => {
         const agenda = new AgendaContactos();
         const ana = new Contacto("Ana", "ana@ucp.edu.ar");
         agenda.agregar(ana);
-        const correo = new Correo(new Contacto("Luis", "luis@ucp.edu.ar"), "Hola", "texto", [ana]);
+        const correo = new Correo(new Contacto("Luis", "luis@ucp.edu.ar"), [ana], "Hola", "texto");
 
         agenda.eliminar("ana@ucp.edu.ar");
 
