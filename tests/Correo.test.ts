@@ -42,4 +42,11 @@ describe("Correo", () => {
     const correo = new Correo(remitente, [], "Hola", "texto");
     expect(correo.esValidoParaEnviar()).toBe(false);
   });
+    it("un correo nuevo empieza como no leído y no favorito", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
+    const correo = new Correo(remitente, [destinatario], "Hola", "texto");
+    expect(correo.estaLeido()).toBe(false);
+    expect(correo.esFavorito()).toBe(false);
+  });
 });

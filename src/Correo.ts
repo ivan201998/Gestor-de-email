@@ -7,6 +7,8 @@ export class Correo {
     private destinatarios: Contacto[];
     private asunto: string;
     private cuerpo: string;
+    private leido: boolean = false;
+    private favorito: boolean = false;
 
     constructor(remitente: Contacto, destinatarios: Contacto[], asunto: string, cuerpo: string) {
         this.id = "C-" + Correo.proximoId;
@@ -39,5 +41,13 @@ export class Correo {
     
     esValidoParaEnviar(): boolean {
         return this.asunto.trim() !== "" && this.destinatarios.length > 0;
+    }
+
+    estaLeido(): boolean {
+        return this.leido;
+    }
+
+    esFavorito(): boolean {
+        return this.favorito;
     }
 }
