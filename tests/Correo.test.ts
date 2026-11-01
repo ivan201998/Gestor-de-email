@@ -10,4 +10,19 @@ describe("Correo", () => {
             expect(correo.getAsunto()).toBe("Asunto de prueba");
             expect(correo.getCuerpo()).toBe("Cuerpo de prueba");
   });
+    it("cada correo tiene un id distinto", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
+    const correo1 = new Correo(remitente, [destinatario], "Uno", "texto");
+    const correo2 = new Correo(remitente, [destinatario], "Dos", "texto");
+    expect(correo1.getId()).not.toBe(correo2.getId());
+  });
+
+  it("modificar la lista de destinatarios devuelta no cambia el correo", () => {
+    const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
+    const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
+    const correo = new Correo(remitente, [destinatario], "Asunto", "texto");
+    correo.getDestinatarios().pop();
+    expect(correo.getDestinatarios().length).toBe(1);
+  });
 });
