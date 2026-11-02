@@ -47,4 +47,31 @@ describe("ServicioEnvio", () => {
     const enviado = gestor.obtener(TipoBandeja.ENVIADOS)[0];
     expect(enviado.getDestinatarios()).toEqual([juan, luis]);
   });
+    it("el error dice por qué no se puede enviar", () => {
+    const servicio = new ServicioEnvio(new GestorBandejas());
+
+    expect(() => servicio.enviar(new Correo(ana, [juan], "  ", "texto"))).toThrow("asunto");
+    expect(() => servicio.enviar(new Correo(ana, [], "Hola", "texto"))).toThrow("destinatarios");
+  });
+    it("un borrador enviado deja de estar en Borradores", () => {
+    const gestor = new GestorBandejas();
+    const servicio = new ServicioEnvio(gestor);
+    const correo = new Correo(ana, [juan], "Hola", "texto");
+    gestor.agregar(correo, TipoBandeja.BORRADORES);
+
+    servicio.enviar(correo);
+
+    expect(gestor.cantidad(TipoBandeja.BORRADORES)).toBe(0);
+    expect(gestor.obtener(TipoBandeja.ENVIADOS)).toEqual([correo]);
+  });
+    it("un borrador inválido no se envía y sigue en Borradores", () => {
+    const gestor = new GestorBandejas();
+    const servicio = new ServicioEnvio(gestor);
+    const borrador = new Correo(ana, [], "Hola", "texto");
+    gestor.agregar(borrador, TipoBandeja.BORRADORES);
+
+    expect(() => servicio.enviar(borrador)).toThrow();
+    expect(gestor.obtener(TipoBandeja.BORRADORES)).toEqual([borrador]);
+    expect(gestor.cantidad(TipoBandeja.ENVIADOS)).toBe(0);
+  });
 });
