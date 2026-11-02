@@ -1,9 +1,23 @@
 import { Correo } from './Correo';
+import { IGestorBandejas } from './IGestorBandejas';
 import { TipoBandeja } from './TipoBandeja';
 
 // RF-06: administra las cuatro bandejas.
+//
+// Cada correo se guarda UNA sola vez y se anota en qué bandeja está (mapa id -> bandeja).
+// Así un correo pertenece a una única bandeja y no puede duplicarse al moverlo.
 
-export class GestorBandejas {
+export class GestorBandejas implements IGestorBandejas {
+
+    // Tabla de movimientos permitidos con mover(): de cada bandeja, a cuáles se puede pasar.
+    // Eliminar y restaurar tienen sus propios métodos, por eso ELIMINADOS no aparece como destino.
+    private static readonly MOVIMIENTOS: Record<TipoBandeja, TipoBandeja[]> = {
+        [TipoBandeja.ENTRADA]: [],
+        [TipoBandeja.ENVIADOS]: [],
+        [TipoBandeja.BORRADORES]: [TipoBandeja.ENVIADOS],
+        [TipoBandeja.ELIMINADOS]: []
+    };
+
     private correos: Correo[] = [];
     private ubicacion: Map<string, TipoBandeja> = new Map();
     private origen: Map<string, TipoBandeja> = new Map(); // de dónde vino un correo eliminado
@@ -52,7 +66,7 @@ export class GestorBandejas {
             throw new Error("El correo " + id + " ya está en " + destino);
         }
 
-        if (!(actual === TipoBandeja.BORRADORES && destino === TipoBandeja.ENVIADOS)) {
+        if (!GestorBandejas.MOVIMIENTOS[actual].includes(destino)) {
             throw new Error("Movimiento no permitido: " + actual + " -> " + destino);
         }
 
