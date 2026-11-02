@@ -36,11 +36,13 @@ describe("Correo", () => {
     const destinatario = new Contacto("Juan Pérez", "juan@gmail.com");
     const correo = new Correo(remitente, [destinatario], "   ", "texto");
     expect(correo.esValidoParaEnviar()).toBe(false);
+    expect(correo.motivoInvalido()).toBe("El correo no tiene asunto");
   });
     it("un correo sin destinatarios no es válido para enviar", () => {
     const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");
     const correo = new Correo(remitente, [], "Hola", "texto");
     expect(correo.esValidoParaEnviar()).toBe(false);
+    expect(correo.motivoInvalido()).toBe("El correo no tiene destinatarios");
   });
     it("un correo nuevo empieza como no leído y no favorito", () => {
     const remitente = new Contacto("Ana López", "ana@ucp.edu.ar");

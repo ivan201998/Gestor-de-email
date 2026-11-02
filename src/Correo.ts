@@ -1,8 +1,12 @@
 import { Contacto } from "./Contacto";
 
+// RF-01: un correo electrónico.
+// Tiene identidad (id único), remitente, destinatarios, asunto y cuerpo,
+// y un estado de lectura y de favorito que empiezan en falso.
+
 export class Correo {
     private static proximoId: number = 1;
-    private id: string;
+    private readonly id: string;
     private remitente: Contacto;
     private destinatarios: Contacto[];
     private asunto: string;
@@ -21,6 +25,7 @@ export class Correo {
 
     getId(): string {
         return this.id;
+        
     }
 
     getRemitente(): Contacto {
@@ -39,8 +44,19 @@ export class Correo {
         return this.cuerpo;
     }
     
+    // Devuelve por qué el correo no se puede enviar, o undefined si está todo bien.
+    motivoInvalido(): string | undefined {
+        if (this.asunto.trim() === "") {
+            return "El correo no tiene asunto";
+        }
+        if (this.destinatarios.length === 0) {
+            return "El correo no tiene destinatarios";
+        }
+        return undefined;
+    }
+
     esValidoParaEnviar(): boolean {
-        return this.asunto.trim() !== "" && this.destinatarios.length > 0;
+        return this.motivoInvalido() === undefined;
     }
 
     estaLeido(): boolean {
