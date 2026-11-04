@@ -10,9 +10,11 @@ import { TipoBandeja } from "./TipoBandeja";
 
 export class ServicioEnvio {
     private gestor: IGestorBandejas;
+    private buzones: Map<string, IGestorBandejas>;
 
-    constructor(gestor: IGestorBandejas) {
+    constructor(gestor: IGestorBandejas, buzones: Map<string, IGestorBandejas> = new Map()) {
         this.gestor = gestor;
+        this.buzones = buzones;
     }
 
     enviar(correo: Correo): void {
@@ -26,5 +28,13 @@ export class ServicioEnvio {
         } else {
             this.gestor.agregar(correo, TipoBandeja.ENVIADOS);
         }
+        this.entregar(correo);
+    }
+        // Pone el correo en la Entrada de cada destinatario que tenga buzón.
+    private entregar(correo: Correo): void {
+        correo.getDestinatarios()
+            .map(destinatario => this.buzones.get(destinatario.getEmail()))
+            .filter(buzon => buzon !== undefined)
+            .forEach(buzon => buzon!.agregar(correo, TipoBandeja.ENTRADA));
     }
 }
