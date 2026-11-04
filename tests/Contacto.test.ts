@@ -3,17 +3,17 @@ import { Contacto } from '../src/Contacto';
 
 describe("Contacto", () => {  
     it("guarda el nombre y el email", () => {
-        const contacto = new Contacto("Ana López", "ana@ucp.edu.ar");
-        expect(contacto.getNombre()).toBe("Ana López");
-        expect(contacto.getEmail()).toBe("ana@ucp.edu.ar");
+        const contacto = new Contacto("Lucas Fernández", "lucas@ucp.edu.ar");
+        expect(contacto.getNombre()).toBe("Lucas Fernández");
+        expect(contacto.getEmail()).toBe("lucas@ucp.edu.ar");
   });
 
     it("rechaza un email con formato inválido", () => {
-        expect(() => new Contacto("Ana", "ana.ucp.edu.ar")).toThrow();
+        expect(() => new Contacto("Lucas", "lucas.ucp.edu.ar")).toThrow();
     });
 
     it("rechaza un nombre vacío", () => {
-        expect(() => new Contacto("  ", "ana@ucp.edu.ar")).toThrow();
+        expect(() => new Contacto("  ", "lucas@ucp.edu.ar")).toThrow();
     });
 });
 

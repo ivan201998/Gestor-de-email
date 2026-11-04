@@ -4,12 +4,12 @@ import { TipoBandeja } from '../src/TipoBandeja';
 import { Correo } from '../src/Correo';
 import { Contacto } from '../src/Contacto';
 
-const ana = new Contacto("Ana", "ana@ucp.edu.ar");
-const luis = new Contacto("Luis", "luis@gmail.com");
+const jose = new Contacto("José", "jose@ucp.edu.ar");
+const manuel = new Contacto("Manuel", "manuel@gmail.com");
 
 
 function nuevoCorreo(): Correo {
-    return new Correo(ana, [luis], "Hola", "texto");
+    return new Correo(jose, [manuel], "Hola", "texto");
 }
 
 describe("GestorBandejas", () => {
