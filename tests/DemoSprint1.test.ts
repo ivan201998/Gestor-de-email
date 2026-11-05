@@ -24,7 +24,7 @@ const esDeMariano = (correo: Correo) => correo.getRemitente().getEmail() === "ma
 const esUrgente = (correo: Correo) => correo.getAsunto().includes("Urgente");
 
 describe("Escenario del Sprint 1", () => {
-    it("un correo a 3 destinatarios llega a la Entrada de cada uno", () => {
+        it("un correo a 3 destinatarios llega a la Entrada de cada uno", () => {
         const buzonIvan = new GestorBandejas();
         const buzonMariano = new GestorBandejas();
         const buzonPepe = new GestorBandejas();
@@ -42,9 +42,13 @@ describe("Escenario del Sprint 1", () => {
         servicio.enviar(correo);
 
         expect(buzonIvan.obtener(TipoBandeja.ENVIADOS)).toEqual([correo]);
-        expect(buzonMariano.obtener(TipoBandeja.ENTRADA)).toEqual([correo]);
-        expect(buzonPepe.obtener(TipoBandeja.ENTRADA)).toEqual([correo]);
-        expect(buzonCarlos.obtener(TipoBandeja.ENTRADA)).toEqual([correo]);
+
+        [buzonMariano, buzonPepe, buzonCarlos].forEach(buzon => {
+            const recibidos = buzon.obtener(TipoBandeja.ENTRADA);
+            expect(recibidos.length).toBe(1);
+            expect(recibidos[0].getAsunto()).toBe("Reunión");
+            expect(recibidos[0].getRemitente()).toBe(ivan);
+        });
     });
 
     it("filtra los correos de un remitente entre 100 de la Entrada", () => {

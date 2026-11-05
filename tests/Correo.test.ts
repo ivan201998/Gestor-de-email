@@ -56,4 +56,15 @@ describe("Correo", () => {
         expect(correo.estaLeido()).toBe(false);
         expect(correo.esFavorito()).toBe(false);
     });
+        it("se puede marcar como leído y otra vez como no leído", () => {
+        const remitente = new Contacto("Ivan Cabrera", "ivan@ucp.edu.ar");
+        const destinatario = new Contacto("Mariano Vega", "mariano@gmail.com");
+        const correo = new Correo(remitente, [destinatario], "Hola", "texto");
+
+        correo.marcarLeido();
+        expect(correo.estaLeido()).toBe(true);
+
+        correo.marcarNoLeido();
+        expect(correo.estaLeido()).toBe(false);
+    });
 });

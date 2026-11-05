@@ -62,8 +62,21 @@ export class Correo {
     estaLeido(): boolean {
         return this.leido;
     }
+        marcarLeido(): void {
+        this.leido = true;
+    }
+
+    marcarNoLeido(): void {
+        this.leido = false;
+    }
 
     esFavorito(): boolean {
         return this.favorito;
+    }
+    
+    // Crea un correo nuevo con los mismos datos (remitente, destinatarios, asunto y cuerpo).
+    // La copia tiene su propio id y empieza como no leída y no favorita.
+    copiar(): Correo {
+        return new Correo(this.remitente, this.destinatarios, this.asunto, this.cuerpo);
     }
 }

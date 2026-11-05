@@ -80,4 +80,24 @@ describe("ServicioEnvio", () => {
         expect(gestor.obtener(TipoBandeja.BORRADORES)).toEqual([borrador]);
         expect(gestor.cantidad(TipoBandeja.ENVIADOS)).toBe(0);
     });
+        it("cada destinatario recibe su propia copia: si uno lo lee, para el otro sigue sin leer", () => {
+        const buzonIvan = new GestorBandejas();
+        const buzonMariano = new GestorBandejas();
+        const buzonPepe = new GestorBandejas();
+        const buzones = new Map([
+            [mariano.getEmail(), buzonMariano],
+            [pepe.getEmail(), buzonPepe]
+        ]);
+        const servicio = new ServicioEnvio(buzonIvan, buzones);
+
+        servicio.enviar(new Correo(ivan, [mariano, pepe], "Hola", "texto"));
+
+        const delMariano = buzonMariano.obtener(TipoBandeja.ENTRADA)[0];
+        const dePepe = buzonPepe.obtener(TipoBandeja.ENTRADA)[0];
+
+        delMariano.marcarLeido();
+
+        expect(delMariano.estaLeido()).toBe(true);
+        expect(dePepe.estaLeido()).toBe(false);
+    });
 });

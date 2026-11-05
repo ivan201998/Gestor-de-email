@@ -35,6 +35,6 @@ export class ServicioEnvio {
         correo.getDestinatarios()
             .map(destinatario => this.buzones.get(destinatario.getEmail()))
             .filter(buzon => buzon !== undefined)
-            .forEach(buzon => buzon!.agregar(correo, TipoBandeja.ENTRADA));
+            .forEach(buzon => buzon!.agregar(correo.copiar(), TipoBandeja.ENTRADA));
     }
 }
