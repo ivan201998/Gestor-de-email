@@ -79,4 +79,12 @@ export class Correo {
     copiar(): Correo {
         return new Correo(this.remitente, this.destinatarios, this.asunto, this.cuerpo);
     }
+
+    marcarFavorito(): void {
+        this.favorito = true;
+    }
+
+    desmarcarFavorito(): void {
+        this.favorito = false;
+    }
 }
