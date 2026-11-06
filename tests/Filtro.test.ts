@@ -69,5 +69,40 @@ describe("Filtro", () => {
 });
 
 describe("RegistroFiltros", () => {
+    it("registra hasta 5 filtros y rechaza el sexto", () => {
+        const registro = new RegistroFiltros();
+        for (let i = 1; i <= 5; i++) {
+            registro.agregar(new Filtro("Filtro " + i, esFavorito));
+        }
 
+        expect(registro.listar().length).toBe(5);
+        expect(() => registro.agregar(new Filtro("Filtro 6", esFavorito))).toThrow();
+    });
+
+    it("no permite dos filtros con el mismo nombre", () => {
+        const registro = new RegistroFiltros();
+        registro.agregar(new Filtro("Favoritos", esFavorito));
+
+        expect(() => registro.agregar(new Filtro("favoritos", esFavorito))).toThrow();
+    });
+
+    it("tres filtros complejos (2 o más campos) se aplican por nombre", () => {
+        const registro = new RegistroFiltros();
+        registro.agregar(new Filtro("Urgentes de Mariano", y(deRemitente("mariano@gmail.com"), asuntoContiene("urgente"))));
+        registro.agregar(new Filtro("Examen o parcial", o(asuntoContiene("examen"), asuntoContiene("parcial"))));
+        registro.agregar(new Filtro("Para Pepe sin favorito", y(paraDestinatario("pepe@ucp.edu.ar"), no(esFavorito))));
+
+        const urgente = new Correo(mariano, [ivan], "Urgente", "texto");
+        const parcial = new Correo(ivan, [mariano], "Parcial de Paradigmas", "texto");
+        const paraPepe = new Correo(ivan, [pepe], "Hola", "texto");
+        const todos = [urgente, parcial, paraPepe];
+
+        expect(registro.aplicar("Urgentes de Mariano", todos)).toEqual([urgente]);
+        expect(registro.aplicar("Examen o parcial", todos)).toEqual([parcial]);
+        expect(registro.aplicar("Para Pepe sin favorito", todos)).toEqual([paraPepe]);
+    });
+
+    it("aplicar un filtro que no existe da error", () => {
+        expect(() => new RegistroFiltros().aplicar("Inexistente", [])).toThrow();
+    });
 });
