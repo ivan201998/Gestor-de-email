@@ -25,7 +25,6 @@ export class Correo {
 
     getId(): string {
         return this.id;
-        
     }
 
     getRemitente(): Contacto {
@@ -44,25 +43,10 @@ export class Correo {
         return this.cuerpo;
     }
     
-    // Devuelve por qué el correo no se puede enviar, o undefined si está todo bien.
-    motivoInvalido(): string | undefined {
-        if (this.asunto.trim() === "") {
-            return "El correo no tiene asunto";
-        }
-        if (this.destinatarios.length === 0) {
-            return "El correo no tiene destinatarios";
-        }
-        return undefined;
-    }
-
-    esValidoParaEnviar(): boolean {
-        return this.motivoInvalido() === undefined;
-    }
-
     estaLeido(): boolean {
         return this.leido;
     }
-        marcarLeido(): void {
+    marcarLeido(): void {
         this.leido = true;
     }
 
@@ -73,7 +57,7 @@ export class Correo {
     esFavorito(): boolean {
         return this.favorito;
     }
-    
+
     // Crea un correo nuevo con los mismos datos (remitente, destinatarios, asunto y cuerpo).
     // La copia tiene su propio id y empieza como no leída y no favorita.
     copiar(): Correo {
