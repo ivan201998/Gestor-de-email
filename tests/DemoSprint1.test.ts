@@ -33,7 +33,8 @@ describe("Escenario del Sprint 1", () => {
         const buzones = new Map([
             [mariano.getEmail(), buzonMariano],
             [pepe.getEmail(), buzonPepe],
-            [carlos.getEmail(), buzonCarlos]
+            [carlos.getEmail(), buzonCarlos], 
+            [ivan.getEmail(), buzonIvan],//mirar esto
         ]);
 
         const servicio = new ServicioEnvio(buzonIvan, buzones);
@@ -49,6 +50,29 @@ describe("Escenario del Sprint 1", () => {
             expect(recibidos[0].getAsunto()).toBe("Reunión");
             expect(recibidos[0].getRemitente()).toBe(ivan);
         });
+        //buzon de ivan
+    });
+
+    it("si un destinatario elimina el correo, los demás lo siguen teniendo en su Entrada", () => {
+        const buzonIvan = new GestorBandejas();
+        const buzonMariano = new GestorBandejas();
+        const buzonPepe = new GestorBandejas();
+
+        const buzones = new Map([
+            [mariano.getEmail(), buzonMariano],
+            [pepe.getEmail(), buzonPepe]
+        ]);
+
+        const servicio = new ServicioEnvio(buzonIvan, buzones);
+        servicio.enviar(new Correo(ivan, [mariano, pepe], "Reunión", "Nos juntamos el martes"));
+
+        const delMariano = buzonMariano.obtener(TipoBandeja.ENTRADA)[0];
+        buzonMariano.eliminar(delMariano.getId());
+
+        expect(buzonMariano.obtener(TipoBandeja.ENTRADA).length).toBe(0);
+        expect(buzonMariano.obtener(TipoBandeja.ELIMINADOS).length).toBe(1);
+        expect(buzonPepe.obtener(TipoBandeja.ENTRADA).length).toBe(1);        // Pepe no se entera
+        expect(buzonIvan.obtener(TipoBandeja.ENVIADOS).length).toBe(1);       // Ivan sigue con su Enviado
     });
 
     it("filtra los correos de un remitente entre 100 de la Entrada", () => {
@@ -56,6 +80,7 @@ describe("Escenario del Sprint 1", () => {
         cargarCienCorreos(gestor);
 
         const deMariano = gestor.obtener(TipoBandeja.ENTRADA).filter(esDeMariano);
+        //bandeja de entrada de tal usuario
 
         expect(gestor.cantidad(TipoBandeja.ENTRADA)).toBe(100);
         expect(deMariano.length).toBe(50);   // los pares
@@ -70,4 +95,5 @@ describe("Escenario del Sprint 1", () => {
 
         expect(resultado.length).toBe(10);   // pares y múltiplos de 5 = múltiplos de 10
     });
+
 });
