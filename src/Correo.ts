@@ -42,6 +42,19 @@ export class Correo {
     getCuerpo(): string {
         return this.cuerpo;
     }
+
+    // Usados al editar un borrador (RF-07).
+    cambiarAsunto(asunto: string): void {
+        this.asunto = asunto;
+    }
+
+    cambiarCuerpo(cuerpo: string): void {
+        this.cuerpo = cuerpo;
+    }
+
+    cambiarDestinatarios(destinatarios: Contacto[]): void {
+        this.destinatarios = [...destinatarios];
+    }
     
     estaLeido(): boolean {
         return this.leido;
