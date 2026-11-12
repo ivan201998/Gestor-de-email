@@ -20,5 +20,19 @@ function entradaConTresCorreos(): GestorBandejas {
 }
 
 describe("EstadisticasCorreos (RF-10)", () => {
-    
+    it("map: devuelve la lista de asuntos de una bandeja", () => {
+
+    });
+
+    it("map: una bandeja vacía devuelve una lista vacía", () => {
+
+    });
+
+    it("filter: devuelve solo los correos que cumplen la condición", () => {
+
+    });
+
+      it("reduce: cuenta cuántos correos hay de cada remitente", () => {
+        
+      });
 });
