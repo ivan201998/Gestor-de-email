@@ -21,18 +21,34 @@ function entradaConTresCorreos(): GestorBandejas {
 
 describe("EstadisticasCorreos (RF-10)", () => {
     it("map: devuelve la lista de asuntos de una bandeja", () => {
+        const estadisticas = new EstadisticasCorreos(entradaConTresCorreos());
 
+        expect(estadisticas.asuntos(TipoBandeja.ENTRADA))
+            .toEqual(["Examen de Paradigmas", "Reunión de grupo", "Urgente: entrega del TP"]);
     });
 
     it("map: una bandeja vacía devuelve una lista vacía", () => {
+        const estadisticas = new EstadisticasCorreos(entradaConTresCorreos());
 
+        expect(estadisticas.asuntos(TipoBandeja.ENVIADOS)).toEqual([]);
     });
 
     it("filter: devuelve solo los correos que cumplen la condición", () => {
+        const estadisticas = new EstadisticasCorreos(entradaConTresCorreos());
 
+        const urgentes = estadisticas.filtrar(TipoBandeja.ENTRADA, asuntoContiene("urgente"));
+
+        expect(urgentes.map(correo => correo.getAsunto())).toEqual(["Urgente: entrega del TP"]);
     });
 
-      it("reduce: cuenta cuántos correos hay de cada remitente", () => {
-        
-      });
+    it("reduce: cuenta cuántos correos no leídos hay en una bandeja", () => {
+        const gestor = entradaConTresCorreos();
+        const estadisticas = new EstadisticasCorreos(gestor);
+
+        expect(estadisticas.totalNoLeidos(TipoBandeja.ENTRADA)).toBe(3);
+
+        gestor.obtener(TipoBandeja.ENTRADA)[0].marcarLeido();
+
+        expect(estadisticas.totalNoLeidos(TipoBandeja.ENTRADA)).toBe(2);
+    });
 });
