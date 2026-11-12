@@ -4,6 +4,7 @@ import { GestorBandejas } from "../src/GestorBandejas";
 import { TipoBandeja } from "../src/TipoBandeja";
 import { Contacto } from "../src/Contacto";
 import { Correo } from "../src/Correo";
+import { ServicioEnvio } from "../src/ServicioEnvio";
 
 const ivan = new Contacto("Ivan Cabrera", "ivan@ucp.edu.ar");
 
@@ -54,5 +55,30 @@ describe("GestorBorradores", () => {
 
         expect(() => borradores.editar(enviado.getId(), { asunto: "Cambiado" })).toThrow();
         expect(enviado.getAsunto()).toBe("Hola");
+    });
+    it("un borrador completado se envía: pasa a Enviados y sale de Borradores", () => {
+        const gestor = new GestorBandejas();
+        const borradores = new GestorBorradores(gestor);
+        const servicio = new ServicioEnvio(gestor);
+        const mariano = new Contacto("Mariano Vega", "mariano@gmail.com");
+
+        const borrador = borradores.crear(ivan);
+        borradores.editar(borrador.getId(), { asunto: "Reunión", destinatarios: [mariano] });
+        servicio.enviar(borrador);
+
+        expect(borradores.listar()).toEqual([]);
+        expect(gestor.obtener(TipoBandeja.ENVIADOS)).toEqual([borrador]);
+    });
+    it("un borrador incompleto no se envía y sigue en Borradores", () => {
+        const gestor = new GestorBandejas();
+        const borradores = new GestorBorradores(gestor);
+        const servicio = new ServicioEnvio(gestor);
+
+        const borrador = borradores.crear(ivan);
+        borradores.editar(borrador.getId(), { asunto: "Sin destinatarios" });
+
+        expect(() => servicio.enviar(borrador)).toThrow("destinatarios");
+        expect(borradores.listar()).toEqual([borrador]);
+        expect(gestor.cantidad(TipoBandeja.ENVIADOS)).toBe(0);
     });
 });
