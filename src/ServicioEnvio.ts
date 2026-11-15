@@ -25,18 +25,29 @@ export class ServicioEnvio {
         this.validador = validador;
     }
 
+    // Enviar son tres pasos: validar, guardar en Enviados y entregar.
     enviar(correo: Correo): void {
+        this.validar(correo);
+        this.guardarEnEnviados(correo);
+        this.entregar(correo);
+    }
+
+    // Si el correo no se puede enviar, tira un error con el motivo.
+    private validar(correo: Correo): void {
         const motivo = this.validador.motivoInvalido(correo);
 
         if (motivo !== undefined) {
             throw new Error(motivo);
         }
+    }
+
+    // Si era un borrador lo mueve a Enviados; si era nuevo lo agrega.
+    private guardarEnEnviados(correo: Correo): void {
         if (this.gestor.bandejaDe(correo.getId()) === TipoBandeja.BORRADORES) {
             this.gestor.mover(correo.getId(), TipoBandeja.ENVIADOS);   // sale de Borradores
         } else {
             this.gestor.agregar(correo, TipoBandeja.ENVIADOS);
         }
-        this.entregar(correo);
     }
 
     // Pone una copia del correo en la Entrada de cada destinatario que tenga buzón.

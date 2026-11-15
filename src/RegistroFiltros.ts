@@ -26,10 +26,15 @@ export class RegistroFiltros {
     }
 
     aplicar(nombre: string, correos: Correo[]): Correo[] {
+        return this.exigirFiltro(nombre).aplicar(correos);
+    }
+
+    // Busca un filtro por nombre; si no existe tira un error.
+    private exigirFiltro(nombre: string): Filtro {
         const filtro = this.obtener(nombre);
         if (filtro === undefined) {
             throw new Error("No existe el filtro " + nombre);
         }
-        return filtro.aplicar(correos);
+        return filtro;
     }
 }

@@ -46,11 +46,7 @@ export class AgendaContactos {
     // Cambia nombre y/o email de un contacto. Si el nuevo email ya lo usa otro contacto, lo rechaza.
     modificar(emailActual: string, nuevoNombre: string, nuevoEmail: string): void {
 
-        const contacto = this.buscar(emailActual);
-
-        if (contacto === undefined) {
-            throw new Error("No existe un contacto con el email " + emailActual);
-        }
+        const contacto = this.exigirContacto(emailActual);
 
         const otro = this.buscar(nuevoEmail);
 
@@ -81,5 +77,18 @@ export class AgendaContactos {
         return true;
 
     }
-    
+
+    // Busca un contacto por email; si no existe tira un error.
+    private exigirContacto(email: string): Contacto {
+
+        const contacto = this.buscar(email);
+
+        if (contacto === undefined) {
+            throw new Error("No existe un contacto con el email " + email);
+        }
+
+        return contacto;
+
+    }
+
 }

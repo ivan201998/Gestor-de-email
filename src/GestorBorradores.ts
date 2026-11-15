@@ -24,11 +24,8 @@ export class GestorBorradores {
 
     // Cambia los datos de un borrador. Solo se cambia lo que viene en "cambios".
     editar(id: string, cambios: { asunto?: string; cuerpo?: string; destinatarios?: Contacto[] }): void {
-        const borrador = this.gestor.obtener(TipoBandeja.BORRADORES).find(correo => correo.getId() === id);
+        const borrador = this.buscarBorrador(id);
 
-        if (borrador === undefined) {
-            throw new Error("No existe un borrador con id " + id);
-        }
         if (cambios.asunto !== undefined) {
             borrador.cambiarAsunto(cambios.asunto);
         }
@@ -43,5 +40,15 @@ export class GestorBorradores {
     // Devuelve los borradores guardados, para retomarlos.
     listar(): Correo[] {
         return this.gestor.obtener(TipoBandeja.BORRADORES);
+    }
+
+    // Busca un borrador por id; si no está en BORRADORES tira un error.
+    private buscarBorrador(id: string): Correo {
+        const borrador = this.listar().find(correo => correo.getId() === id);
+
+        if (borrador === undefined) {
+            throw new Error("No existe un borrador con id " + id);
+        }
+        return borrador;
     }
 }

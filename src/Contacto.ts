@@ -37,7 +37,7 @@ export class Contacto {
 
     }
 
-    // Devuelve el dominio del email (ej: "ucp.edu.ar"). Lo van a usar los filtros del Sprint 2.
+    // Devuelve el dominio del email (ej: "ucp.edu.ar").
     getDominio(): string {
 
         return this.email.split("@")[1];
