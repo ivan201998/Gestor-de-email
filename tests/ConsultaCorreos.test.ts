@@ -34,4 +34,13 @@ describe("ConsultaCorreos", () => {
 
         expect(consulta.noLeidos(TipoBandeja.ENTRADA)).toEqual([]);
     });
+    it("el estado de leído se mantiene al volver a consultar el correo en la bandeja", () => {
+        const gestor = new GestorBandejas();
+        const correo = new Correo(ivan, [mariano], "Hola", "texto");
+        gestor.agregar(correo, TipoBandeja.ENTRADA);
+
+        gestor.obtener(TipoBandeja.ENTRADA)[0].marcarLeido();
+
+        expect(gestor.obtener(TipoBandeja.ENTRADA)[0].estaLeido()).toBe(true);
+    });
 });

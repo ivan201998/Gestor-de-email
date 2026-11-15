@@ -45,4 +45,18 @@ describe("Correo", () => {
         correo.marcarNoLeido();
         expect(correo.estaLeido()).toBe(false);
     });
+    it("se crean varios correos con distintos remitentes y destinatarios, y cada uno guarda sus datos", () => {
+        const ivan = new Contacto("Ivan Cabrera", "ivan@ucp.edu.ar");
+        const mariano = new Contacto("Mariano Vega", "mariano@gmail.com");
+        const pepe = new Contacto("Pepe Gómez", "pepe@ucp.edu.ar");
+
+        const primero = new Correo(ivan, [mariano], "Hola", "texto 1");
+        const segundo = new Correo(pepe, [ivan, mariano], "Reunión", "texto 2");
+
+        expect(primero.getRemitente()).toBe(ivan);
+        expect(primero.getDestinatarios()).toEqual([mariano]);
+        expect(segundo.getRemitente()).toBe(pepe);
+        expect(segundo.getDestinatarios()).toEqual([ivan, mariano]);
+        expect(primero.getId()).not.toBe(segundo.getId());
+    });
 });
