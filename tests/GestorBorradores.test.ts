@@ -81,4 +81,18 @@ describe("GestorBorradores", () => {
         expect(borradores.listar()).toEqual([borrador]);
         expect(gestor.cantidad(TipoBandeja.ENVIADOS)).toBe(0);
     });
+    it("se puede editar solo el cuerpo o solo los destinatarios", () => {
+        const gestor = new GestorBandejas();
+        const borradores = new GestorBorradores(gestor);
+        const mariano = new Contacto("Mariano Vega", "mariano@gmail.com");
+        const borrador = borradores.crear(ivan);
+        borradores.editar(borrador.getId(), { asunto: "Hola" });
+
+        borradores.editar(borrador.getId(), { cuerpo: "Texto nuevo" });
+        borradores.editar(borrador.getId(), { destinatarios: [mariano] });
+
+        expect(borrador.getAsunto()).toBe("Hola");   // no se tocó
+        expect(borrador.getCuerpo()).toBe("Texto nuevo");
+        expect(borrador.getDestinatarios()).toEqual([mariano]);
+    });
 });
