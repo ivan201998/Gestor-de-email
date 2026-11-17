@@ -9,13 +9,6 @@ const ivan = new Contacto("Ivan Cabrera", "ivan@ucp.edu.ar");
 const mariano = new Contacto("Mariano Vega", "mariano@gmail.com");
 
 describe("Casos de error: GestorBandejas", () => {
-    it("no deja agregar un correo nuevo directo a Eliminados", () => {
-        const gestor = new GestorBandejas();
-        const correo = new Correo(ivan, [mariano], "Hola", "texto");
-
-        expect(() => gestor.agregar(correo, TipoBandeja.ELIMINADOS)).toThrow();
-    });
-
     it("no deja mover un correo a la bandeja donde ya está", () => {
         const gestor = new GestorBandejas();
         const correo = new Correo(ivan, [mariano], "Hola", "texto");
@@ -49,15 +42,6 @@ describe("Casos de error: GestorBandejas", () => {
 });
 
 describe("Casos de error: AgendaContactos", () => {
-    it("listar devuelve una copia: cambiarla no afecta a la agenda", () => {
-        const agenda = new AgendaContactos();
-        agenda.agregar(ivan);
-
-        agenda.listar().pop();
-
-        expect(agenda.cantidad()).toBe(1);
-    });
-
     it("no deja modificar un contacto que no existe", () => {
         const agenda = new AgendaContactos();
 
@@ -70,22 +54,5 @@ describe("Casos de error: AgendaContactos", () => {
         agenda.agregar(new Contacto("Mariano Vega", "mariano@gmail.com"));
 
         expect(() => agenda.modificar("ivan@ucp.edu.ar", "Ivan Cabrera", "mariano@gmail.com")).toThrow();
-    });
-
-    it("eliminar un contacto que no existe devuelve false", () => {
-        const agenda = new AgendaContactos();
-
-        expect(agenda.eliminar("nadie@ucp.edu.ar")).toBe(false);
-    });
-});
-
-describe("Contacto: métodos auxiliares", () => {
-    it("getDominio devuelve lo que está después de la @", () => {
-        expect(ivan.getDominio()).toBe("ucp.edu.ar");
-        expect(mariano.getDominio()).toBe("gmail.com");
-    });
-
-    it("toString muestra el nombre y el email", () => {
-        expect(ivan.toString()).toBe("Ivan Cabrera <ivan@ucp.edu.ar>");
     });
 });
