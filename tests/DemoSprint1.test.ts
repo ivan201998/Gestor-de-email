@@ -61,6 +61,16 @@ describe("Escenario del Sprint 1", () => {
         expect(buzonMariano.obtener(TipoBandeja.ENVIADOS)).toEqual([respuesta]);
         expect(buzonIvan.obtener(TipoBandeja.ENTRADA).length).toBe(1);   // ahora Ivan sí recibe
         expect(buzonPepe.obtener(TipoBandeja.ENTRADA).length).toBe(1);   // Pepe sigue con el suyo
+
+        //apartado eliminar
+        const delMariano = buzonMariano.obtener(TipoBandeja.ENTRADA)[0];
+        buzonMariano.eliminar(delMariano.getId());
+
+        expect(buzonMariano.obtener(TipoBandeja.ENTRADA).length).toBe(0);
+        expect(buzonMariano.obtener(TipoBandeja.ELIMINADOS).length).toBe(1);
+        expect(buzonPepe.obtener(TipoBandeja.ENTRADA).length).toBe(1);        // Pepe no se entera
+        expect(buzonIvan.obtener(TipoBandeja.ENVIADOS).length).toBe(1);       // Ivan sigue con su Enviado
+        
     });
 
     it("si un destinatario elimina el correo, los demás lo siguen teniendo en su Entrada", () => {
